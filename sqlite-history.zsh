@@ -421,7 +421,7 @@ $seps') as argv, max(start_time) as max_start"
 
     local mst="datetime(max_start, 'unixepoch')"
     local dst="datetime('now', 'start of day')"
-    local timecol="strftime(case when $mst > $dst then '%H:%M' else '%d/%m' end, max_start, 'unixepoch', 'localtime') as time"
+    local timecol="strftime(case when $mst > $dst then '%Y-%m-%d %H:%M' else '%Y-%m-%d %H:%M' end, max_start, 'unixepoch', 'localtime') as time"
 
     selcols="${timecol}, ${selcols}, argv as cmd"
 
