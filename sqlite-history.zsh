@@ -218,12 +218,19 @@ histdb-sync () {
             if [[ $(git rev-parse --is-inside-work-tree) != "true" ]] || [[ "$(git rev-parse --show-toplevel)" != "${PWD:A}" ]]; then
                 git init
                 git config merge.histdb.driver "${HISTDB_INSTALLED_IN:h}/histdb-merge %O %A %B"
+                # Set name to something to have something to go off in git history.
+                git config user.name "${HISTDB_HOST}"
+                # Set explicitely back to default if user has this changes via global git config.
+                git config pull.ff true
+                # To squelch the message " Pulling without specifying how to reconcile divergent branches is discouraged".
+                git config pull.rebase false
+
                 echo "${HISTDB_FILE:t} merge=histdb" >>! .gitattributes
                 git add .gitattributes
                 git add "${HISTDB_FILE:t}"
             fi
             _histdb_stop_sqlite_pipe # Stop in case of a merge, starting again afterwards
-            git commit -am "history" && git pull --no-edit && git push
+            git commit -am "history - ${HISTDB_HOST}" && git pull --no-edit && git push
             _histdb_start_sqlite_pipe
             popd -q
         }
