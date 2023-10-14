@@ -151,6 +151,7 @@ _histdb-isearch () {
                                # self-insert, rather than nuking
 
     zle -K main
+    POSTDISPLAY=""
     PREDISPLAY=""
     region_highlight=()
 
